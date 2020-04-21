@@ -38,17 +38,17 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Files\FileWorker.h">
-      <Filter>Файлы заголовков\Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Files\IFileWorker.h">
-      <Filter>Файлы заголовков\Files</Filter>
-    </ClInclude>
     <ClInclude Include="Server\IServer.hpp">
       <Filter>Файлы заголовков\Server</Filter>
     </ClInclude>
     <ClInclude Include="Server\Server.hpp">
       <Filter>Файлы заголовков\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Files\FileWorker.hpp">
+      <Filter>Файлы заголовков\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Files\IFileWorker.hpp">
+      <Filter>Файлы заголовков\Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

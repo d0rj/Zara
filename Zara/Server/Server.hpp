@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IServer.h"
+#include "IServer.hpp"
 
 
 namespace Zara

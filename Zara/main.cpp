@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Server/Server.h"
+#include "Server/Server.hpp"
 
 
 using namespace std;

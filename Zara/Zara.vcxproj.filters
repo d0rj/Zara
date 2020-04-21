@@ -19,6 +19,12 @@
     <Filter Include="Исходные файлы\Server">
       <UniqueIdentifier>{f33c8a35-e258-4073-88db-ee0b89d1b035}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Files">
+      <UniqueIdentifier>{8413269d-5bfa-40c5-9722-103780c782ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Файлы заголовков\Files">
+      <UniqueIdentifier>{289196be-4118-4d71-8b96-0c1c06934932}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -27,13 +33,25 @@
     <ClCompile Include="Server\Server.cpp">
       <Filter>Исходные файлы\Server</Filter>
     </ClCompile>
+    <ClCompile Include="Files\FileWorker.cpp">
+      <Filter>Исходные файлы\Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Server\IServer.h">
+    <ClInclude Include="Files\FileWorker.h">
+      <Filter>Файлы заголовков\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Files\IFileWorker.h">
+      <Filter>Файлы заголовков\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\IServer.hpp">
       <Filter>Файлы заголовков\Server</Filter>
     </ClInclude>
-    <ClInclude Include="Server\Server.h">
+    <ClInclude Include="Server\Server.hpp">
       <Filter>Файлы заголовков\Server</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

@@ -13,5 +13,27 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Файлы заголовков\Server">
+      <UniqueIdentifier>{ede25935-27a7-4c90-990f-5ee75070ad4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Server">
+      <UniqueIdentifier>{f33c8a35-e258-4073-88db-ee0b89d1b035}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Server\Server.cpp">
+      <Filter>Исходные файлы\Server</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Server\IServer.h">
+      <Filter>Файлы заголовков\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="Server\Server.h">
+      <Filter>Файлы заголовков\Server</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -25,6 +25,12 @@
     <Filter Include="Файлы заголовков\Files">
       <UniqueIdentifier>{289196be-4118-4d71-8b96-0c1c06934932}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\Crypto">
+      <UniqueIdentifier>{4ce701ea-1642-474d-8070-1336896867bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Crypto">
+      <UniqueIdentifier>{14e44750-4ab1-4627-b13c-aa5aae6db210}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,6 +41,9 @@
     </ClCompile>
     <ClCompile Include="Files\FileWorker.cpp">
       <Filter>Исходные файлы\Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Crypto\EVP.cpp">
+      <Filter>Исходные файлы\Crypto</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +58,12 @@
     </ClInclude>
     <ClInclude Include="Files\IFileWorker.hpp">
       <Filter>Файлы заголовков\Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Crypto\EVP.hpp">
+      <Filter>Файлы заголовков\Crypto</Filter>
+    </ClInclude>
+    <ClInclude Include="Crypto\IEncoder.hpp">
+      <Filter>Файлы заголовков\Crypto</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

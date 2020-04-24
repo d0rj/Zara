@@ -35,9 +35,9 @@ bool Zara::FileWorker::Exists(const fs::path path) const
 
 bool Zara::FileWorker::CreateF(const fs::path path, const char* data)
 {
-	std::ofstream file(path);
-	file << data;
-	file.close();
+	output.open(path);
+	output << data;
+	output.close();
 
 	return true;
 }
@@ -51,8 +51,9 @@ bool Zara::FileWorker::CreateF(const fs::path path, const std::string& data)
 
 bool Zara::FileWorker::CreateF(const fs::path path, const nlohmann::json& j)
 {
-	std::ofstream file(path);
-	file << j;
+	output.open(path);
+	output << j;
+	output.close();
 
 	return true;
 }
@@ -60,10 +61,11 @@ bool Zara::FileWorker::CreateF(const fs::path path, const nlohmann::json& j)
 
 std::string Zara::FileWorker::ReadAllFile(const fs::path path)
 {
-	std::ifstream file(path);
 	std::string result;
-	result.assign(std::istreambuf_iterator<char>(file), std::istreambuf_iterator<char>());
-	file.close();
+
+	input.open(path);
+	result.assign(std::istreambuf_iterator<char>(input), std::istreambuf_iterator<char>());
+	input.close();
 
 	return result;
 }
@@ -71,9 +73,11 @@ std::string Zara::FileWorker::ReadAllFile(const fs::path path)
 
 nlohmann::json Zara::FileWorker::ReadJson(const fs::path path)
 {
-	std::ifstream file(path);
 	nlohmann::json j;
-	file >> j;
+
+	input.open(path);
+	input >> j;
+	input.close();
 
 	return j;
 }

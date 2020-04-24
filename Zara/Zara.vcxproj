@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Crypto\EVP.cpp" />
+    <ClCompile Include="Engine\WiredSnake.cpp" />
     <ClCompile Include="Files\FileWorker.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Server\Server.cpp" />
@@ -147,6 +148,8 @@
   <ItemGroup>
     <ClInclude Include="Crypto\EVP.hpp" />
     <ClInclude Include="Crypto\IEncoder.hpp" />
+    <ClInclude Include="Engine\IDbEngine.hpp" />
+    <ClInclude Include="Engine\WiredSnake.hpp" />
     <ClInclude Include="Files\FileWorker.hpp" />
     <ClInclude Include="Files\IFileWorker.hpp" />
     <ClInclude Include="Server\IServer.hpp" />

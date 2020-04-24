@@ -1,12 +1,16 @@
 #pragma once
 
 #include "IFileWorker.hpp"
+#include <fstream>
 
 
 namespace Zara
 {
 	class FileWorker : virtual public IFileWorker
 	{
+	private:
+		std::ifstream input;
+		std::ofstream output;
 	public:
 		bool IsDir(const fs::path path) override;
 		bool CreateDir(const fs::path path) override;

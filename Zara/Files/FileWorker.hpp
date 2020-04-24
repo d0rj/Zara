@@ -8,14 +8,15 @@ namespace Zara
 	class FileWorker : virtual public IFileWorker
 	{
 	public:
-		virtual bool IsDir(const std::filesystem::path path) override;
-		virtual bool CreateDir(const std::filesystem::path path) override;
-		virtual bool Exists(const std::filesystem::path path) const override;
-		virtual bool CreateF(const std::filesystem::path path, const char* data) override;
-		virtual bool CreateF(const std::filesystem::path path, const std::string& data) override;
-		virtual bool CreateF(const std::filesystem::path path, const nlohmann::json& j) override;
-		virtual std::string ReadAllFile(const std::filesystem::path path) override;
-		virtual nlohmann::json ReadJson(const std::filesystem::path path) override;
-		virtual bool DeleteF(const std::filesystem::path path) override;
+		bool IsDir(const fs::path path) override;
+		bool CreateDir(const fs::path path) override;
+		bool CheckOrCreateDir(const fs::path path) override;
+		bool Exists(const fs::path path) const override;
+		bool CreateF(const fs::path path, const char* data) override;
+		bool CreateF(const fs::path path, const std::string& data) override;
+		bool CreateF(const fs::path path, const nlohmann::json& j) override;
+		std::string ReadAllFile(const fs::path path) override;
+		nlohmann::json ReadJson(const fs::path path) override;
+		bool DeleteF(const fs::path path) override;
 	};
 }

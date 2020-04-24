@@ -6,25 +6,25 @@
 namespace fs = std::filesystem;
 
 
-bool Zara::FileWorker::IsDir(const std::string path)
+bool Zara::FileWorker::IsDir(const std::filesystem::path path)
 {
 	return fs::is_directory(path);
 }
 
 
-bool Zara::FileWorker::CreateDir(const std::string path)
+bool Zara::FileWorker::CreateDir(const std::filesystem::path path)
 {
 	return fs::create_directory(path);
 }
 
 
-bool Zara::FileWorker::Exists(const std::string path) const
+bool Zara::FileWorker::Exists(const std::filesystem::path path) const
 {
 	return fs::exists(path);
 }
 
 
-bool Zara::FileWorker::CreateF(const std::string path, const char* data)
+bool Zara::FileWorker::CreateF(const std::filesystem::path path, const char* data)
 {
 	std::ofstream file(path);
 	file << data;
@@ -34,13 +34,13 @@ bool Zara::FileWorker::CreateF(const std::string path, const char* data)
 }
 
 
-bool Zara::FileWorker::CreateF(const std::string path, const std::string& data)
+bool Zara::FileWorker::CreateF(const std::filesystem::path path, const std::string& data)
 {
 	return CreateF(path, data.c_str());
 }
 
 
-bool Zara::FileWorker::CreateF(const std::string path, const nlohmann::json& j)
+bool Zara::FileWorker::CreateF(const std::filesystem::path path, const nlohmann::json& j)
 {
 	std::ofstream file(path);
 	file << j;
@@ -49,7 +49,7 @@ bool Zara::FileWorker::CreateF(const std::string path, const nlohmann::json& j)
 }
 
 
-std::string Zara::FileWorker::ReadAllFile(const std::string path)
+std::string Zara::FileWorker::ReadAllFile(const std::filesystem::path path)
 {
 	std::ifstream file(path);
 	std::string result;
@@ -60,7 +60,7 @@ std::string Zara::FileWorker::ReadAllFile(const std::string path)
 }
 
 
-nlohmann::json Zara::FileWorker::ReadJson(const std::string path)
+nlohmann::json Zara::FileWorker::ReadJson(const std::filesystem::path path)
 {
 	std::ifstream file(path);
 	nlohmann::json j;
@@ -70,7 +70,7 @@ nlohmann::json Zara::FileWorker::ReadJson(const std::string path)
 }
 
 
-bool Zara::FileWorker::DeleteF(const std::string path)
+bool Zara::FileWorker::DeleteF(const std::filesystem::path path)
 {
 	return fs::remove(path);
 }

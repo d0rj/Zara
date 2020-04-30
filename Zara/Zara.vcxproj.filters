@@ -37,6 +37,12 @@
     <Filter Include="Исходные файлы\Engine">
       <UniqueIdentifier>{23064a57-1f79-43b7-8f1d-67df88bec9bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\Parser">
+      <UniqueIdentifier>{0071736a-8ad4-40df-b4d2-a6be13075ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Parser">
+      <UniqueIdentifier>{f3ef9b70-97df-4b08-9991-d7791b81145c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -53,6 +59,18 @@
     </ClCompile>
     <ClCompile Include="Engine\WiredSnake.cpp">
       <Filter>Исходные файлы\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\EagleParser.cpp">
+      <Filter>Исходные файлы\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\ArgumentState.cpp">
+      <Filter>Исходные файлы\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\CommandState.cpp">
+      <Filter>Исходные файлы\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="Parser\DefaultState.cpp">
+      <Filter>Исходные файлы\Parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +97,27 @@
     </ClInclude>
     <ClInclude Include="Engine\WiredSnake.hpp">
       <Filter>Файлы заголовков\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\EagleParser.hpp">
+      <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\IParser.hpp">
+      <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\IParserState.hpp">
+      <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\ArgumentState.hpp">
+      <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\CommandState.hpp">
+      <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\DefaultState.hpp">
+      <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\EndState.hpp">
+      <Filter>Файлы заголовков\Parser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

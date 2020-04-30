@@ -143,6 +143,10 @@
     <ClCompile Include="Engine\WiredSnake.cpp" />
     <ClCompile Include="Files\FileWorker.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Parser\ArgumentState.cpp" />
+    <ClCompile Include="Parser\CommandState.cpp" />
+    <ClCompile Include="Parser\DefaultState.cpp" />
+    <ClCompile Include="Parser\EagleParser.cpp" />
     <ClCompile Include="Server\Server.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +156,13 @@
     <ClInclude Include="Engine\WiredSnake.hpp" />
     <ClInclude Include="Files\FileWorker.hpp" />
     <ClInclude Include="Files\IFileWorker.hpp" />
+    <ClInclude Include="Parser\ArgumentState.hpp" />
+    <ClInclude Include="Parser\CommandState.hpp" />
+    <ClInclude Include="Parser\DefaultState.hpp" />
+    <ClInclude Include="Parser\EagleParser.hpp" />
+    <ClInclude Include="Parser\EndState.hpp" />
+    <ClInclude Include="Parser\IParser.hpp" />
+    <ClInclude Include="Parser\IParserState.hpp" />
     <ClInclude Include="Server\IServer.hpp" />
     <ClInclude Include="Server\Server.hpp" />
   </ItemGroup>

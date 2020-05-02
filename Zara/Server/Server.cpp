@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include <iostream>
+#include <functional>
 
 
 void Zara::Server::handleNewConnection(SOCKET sock)
@@ -49,8 +50,11 @@ Zara::Server::Server(int port) : Zara::IServer(port), port(port)
 }
 
 
-void Zara::Server::Listen(void(*onConnect)(SOCKET sock), void(*onDisconnect)(SOCKET sock), 
-							void(*onMessage)(SOCKET sock, std::string message))
+void Zara::Server::Listen(
+	std::function<void(SOCKET)> onConnect,
+	std::function<void(SOCKET)> onDisconnect,
+	std::function<void(SOCKET, std::string)> onMessage
+)
 {
 	listen(listeningSock, SOMAXCONN);
 

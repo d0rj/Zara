@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 {
 	EagleParser parser;
 
-	auto m = parser.Parse("insert {{\"hello\": \"world\"}} play {music} dance {}");
+	auto m = parser.Parse("dance {} insert {{\"hello\": \"world\"}} play {music}");
 
 	for (auto it = m.cbegin(); it != m.cend(); ++it)
 		std::cout << it->first << " - " << it->second << "\n";

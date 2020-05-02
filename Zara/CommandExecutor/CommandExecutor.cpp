@@ -1,0 +1,97 @@
+#include "CommandExecutor.hpp"
+#include <algorithm>
+#include <iostream>
+
+
+void Zara::CommandExecutor::executeCommand(std::string cmd, std::string arg, SOCKET sock)
+{
+	if (cmd == "use")
+		useCommand(arg, sock);
+	else if (cmd == "db")
+		dbCommand(arg, sock);
+}
+
+
+void Zara::CommandExecutor::useCommand(std::string arg, SOCKET sock)
+{
+	if (!arg.empty())
+	{
+		usedDb = arg;
+		EngineResult result = dbEngine->CreateDb(arg);
+
+		if (result == EngineResult::AlreadyExists)
+			server->Send(sock, "Switched to \'" + usedDb + "\'.");
+		else
+			server->Send(sock, "Created db: \'" + usedDb + "\'.");
+	}
+	else
+	{
+		server->Send(sock, "Invalid command argument: " + arg + ".");
+	}
+}
+
+
+void Zara::CommandExecutor::dbCommand(std::string arg, SOCKET sock)
+{
+	if (arg.empty())
+	{
+		server->Send(sock, "Used db: \'" + usedDb + "\'.");
+	}
+	else if (arg == "*")
+	{
+		server->Send(sock, dbEngine->FindAllCollections(usedDb));
+	}
+	else
+	{
+		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+	}
+}
+
+
+Zara::CommandExecutor::CommandExecutor(IDbEngine* dbEngine, IParser* parser, IServer* server)
+	: dbEngine(dbEngine), parser(parser), server(server)
+{
+}
+
+
+void Zara::CommandExecutor::OnConnect(SOCKET sock)
+{
+}
+
+
+void Zara::CommandExecutor::OnDisconnect(SOCKET sock)
+{
+}
+
+
+void Zara::CommandExecutor::OnMessage(SOCKET sock, std::string message)
+{
+	std::unordered_map<std::string, std::string> parsedCommands = parser->Parse(message);
+	if (parsedCommands.empty())
+	{
+		server->Send(sock, "Error: no commands.");
+		return;
+	}
+
+	bool hasFinded = false;
+	for (auto parsedCommand = parsedCommands.cbegin(); parsedCommand != parsedCommands.cend(); ++parsedCommand)
+	{
+		if (auto finded = std::find(commands.begin(), commands.end(), parsedCommand->first); finded != commands.end())
+		{
+			hasFinded = true;
+			executeCommand(parsedCommand->first, parsedCommand->second, sock);
+		}
+		else
+		{
+			std::string result = "Unknown command \"" + parsedCommand->first + "\".";
+			server->Send(sock, result);
+			// TODO: handle errors
+			break;
+		}
+	}
+
+	if (!hasFinded)
+	{
+		server->Send(sock, "No supported commands finded.");
+	}
+}

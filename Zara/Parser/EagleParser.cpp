@@ -33,9 +33,10 @@ void Zara::EagleParser::StopParse()
 }
 
 
-std::unordered_map<std::string, std::string> Zara::EagleParser::Parse(std::string str)
+std::map<std::string, std::string> Zara::EagleParser::Parse(std::string str)
 {
 	parsing = true;
+	parsed = std::map<std::string, std::string>();
 
 	for (char ch : str)
 	{

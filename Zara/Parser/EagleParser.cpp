@@ -30,12 +30,15 @@ void Zara::EagleParser::SetArgument(std::string arg)
 void Zara::EagleParser::StopParse()
 {
 	parsing = false;
+	state = new DefaultState(this);
+	tempCommand = std::string();
 }
 
 
-std::map<std::string, std::string> Zara::EagleParser::Parse(std::string str)
+std::unordered_map<std::string, std::string> Zara::EagleParser::Parse(std::string str)
 {
 	parsing = true;
+	parsed = std::unordered_map<std::string, std::string>();
 
 	for (char ch : str)
 	{
@@ -45,6 +48,7 @@ std::map<std::string, std::string> Zara::EagleParser::Parse(std::string str)
 		state->NextChar(ch);
 	}
 
+	StopParse();
 	return parsed;
 }
 

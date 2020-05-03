@@ -43,6 +43,12 @@
     <Filter Include="Исходные файлы\Parser">
       <UniqueIdentifier>{f3ef9b70-97df-4b08-9991-d7791b81145c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\CommandExecutor">
+      <UniqueIdentifier>{3ea31d5d-78d5-4c15-8762-191f3a1ee96e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\CommandExecutor">
+      <UniqueIdentifier>{8f2919e3-039a-4730-9ec6-cd90d800d4b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="Parser\DefaultState.cpp">
       <Filter>Исходные файлы\Parser</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandExecutor\CommandExecutor.cpp">
+      <Filter>Исходные файлы\CommandExecutor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="Parser\EndState.hpp">
       <Filter>Файлы заголовков\Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandExecutor\CommandExecutor.hpp">
+      <Filter>Файлы заголовков\CommandExecutor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

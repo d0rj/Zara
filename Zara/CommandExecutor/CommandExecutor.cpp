@@ -9,6 +9,8 @@ void Zara::CommandExecutor::executeCommand(std::string cmd, std::string arg, SOC
 		useCommand(arg, sock);
 	else if (cmd == "db")
 		dbCommand(arg, sock);
+	else if (cmd == "coll")
+		collCommand(arg, sock);
 }
 
 
@@ -16,13 +18,36 @@ void Zara::CommandExecutor::useCommand(std::string arg, SOCKET sock)
 {
 	if (!arg.empty())
 	{
-		usedDb = arg;
-		EngineResult result = dbEngine->CreateDb(arg);
+		int dotPos = arg.find('.');
 
-		if (result == EngineResult::AlreadyExists)
-			server->Send(sock, "Switched to \'" + usedDb + "\'.");
+		if (dotPos == std::string::npos)
+		{
+			usedDb = arg;
+			EngineResult result = dbEngine->CreateDb(arg);
+
+			if (result == EngineResult::AlreadyExists)
+				server->Send(sock, "Switched to \'" + usedDb + "\'.");
+			else
+				server->Send(sock, "Created db: \'" + usedDb + "\'.");
+		}
 		else
-			server->Send(sock, "Created db: \'" + usedDb + "\'.");
+		{
+			std::string first;
+			first = arg.substr(0, dotPos);
+			if (first != "db")
+			{
+				server->Send(sock, "Invalid argument: \'" + arg + "\'. ");
+				return;
+			}
+
+			usedCollection = arg.substr(dotPos + 1, arg.size() - dotPos - 1);
+			EngineResult result = dbEngine->CreateCollection(usedDb, usedCollection);
+
+			if (result == EngineResult::AlreadyExists)
+				server->Send(sock, "Switched to collection \'" + usedCollection + "\' in \'" + usedDb + "\'.");
+			else
+				server->Send(sock, "Created collection: \'" + usedDb + "." + usedCollection + "\'.");
+		}
 	}
 	else
 	{
@@ -40,6 +65,19 @@ void Zara::CommandExecutor::dbCommand(std::string arg, SOCKET sock)
 	else if (arg == "*")
 	{
 		server->Send(sock, dbEngine->FindAllCollections(usedDb));
+	}
+	else
+	{
+		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+	}
+}
+
+
+void Zara::CommandExecutor::collCommand(std::string arg, SOCKET sock)
+{
+	if (arg.empty())
+	{
+		server->Send(sock, "Used collection: \'" + usedDb + "." + usedCollection + "\'.");
 	}
 	else
 	{

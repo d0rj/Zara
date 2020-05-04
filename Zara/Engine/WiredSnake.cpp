@@ -267,7 +267,15 @@ Zara::EngineResult Zara::WiredSnake::CreateDocument(std::string dbName, std::str
 	fs::path filePath = collectionFilePath(dbName, collectionName);
 	nlohmann::json collection = files->ReadJson(filePath);
 
-	nlohmann::json docJson = nlohmann::json::parse(document);
+	nlohmann::json docJson;
+	try
+	{
+		docJson = nlohmann::json::parse(document);
+	}
+	catch (nlohmann::json::parse_error& e)
+	{
+		return EngineResult::Error;
+	}
 
 	collection["documents"].push_back(docJson);
 	files->CreateF(filePath, collection);

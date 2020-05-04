@@ -11,6 +11,8 @@ void Zara::CommandExecutor::executeCommand(std::string cmd, std::string arg, SOC
 		dbCommand(arg, sock);
 	else if (cmd == "coll")
 		collCommand(arg, sock);
+	else if (cmd == "insert")
+		insertCommand(arg, sock);
 }
 
 
@@ -26,7 +28,7 @@ void Zara::CommandExecutor::useCommand(std::string arg, SOCKET sock)
 			EngineResult result = dbEngine->CreateDb(arg);
 
 			if (result == EngineResult::AlreadyExists)
-				server->Send(sock, "Switched to \'" + usedDb + "\'.");
+				server->Send(sock, "Switched to db \'" + usedDb + "\'.");
 			else
 				server->Send(sock, "Created db: \'" + usedDb + "\'.");
 		}
@@ -79,9 +81,40 @@ void Zara::CommandExecutor::collCommand(std::string arg, SOCKET sock)
 	{
 		server->Send(sock, "Used collection: \'" + usedDb + "." + usedCollection + "\'.");
 	}
+	else if (arg == "*")
+	{
+		server->Send(sock, dbEngine->AllDocuments(usedDb, usedCollection));
+	}
 	else
 	{
 		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+	}
+}
+
+
+void Zara::CommandExecutor::insertCommand(std::string arg, SOCKET sock)
+{
+	if (arg.empty())
+	{
+		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		return;
+	}
+	
+	switch (dbEngine->CreateDocument(usedDb, usedCollection, arg))
+	{
+	case EngineResult::Error:
+	case EngineResult::ErrorOnCreating:
+	case EngineResult::ErrorInEngine:
+		server->Send(sock, "Error in inserting document: \'" + arg + "\'.");
+		break;
+	case EngineResult::OK:
+		server->Send(sock, "Document created.");
+		break;
+	case EngineResult::AlreadyExists:
+		server->Send(sock, "Document already exists.");
+		break;
+	default:
+		break;
 	}
 }
 

@@ -16,12 +16,13 @@ namespace Zara
 		IServer* server;
 		std::string usedDb = "default";
 		std::string usedCollection = "default";
-		std::vector<std::string> commands = {"use", "db", "coll"};
+		std::vector<std::string> commands = {"use", "db", "coll", "insert"};
 
 		void executeCommand(std::string cmd, std::string arg, SOCKET sock);
 		void useCommand(std::string arg, SOCKET sock);
 		void dbCommand(std::string arg, SOCKET sock);
 		void collCommand(std::string arg, SOCKET sock);
+		void insertCommand(std::string arg, SOCKET sock);
 	public:
 		CommandExecutor(IDbEngine* dbEngine, IParser* parser, IServer* server);
 		void OnConnect(SOCKET sock);

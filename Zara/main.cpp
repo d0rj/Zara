@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 			std::cout << "Disconnected." << std::endl;
 			executor.OnDisconnect(sock);
 		},
-		[&executor, &parser](SOCKET sock, std::string message) mutable {
+		[&executor](SOCKET sock, std::string message) mutable {
 			std::cout << "Message: " << message << "."<< std::endl;
 			executor.OnMessage(sock, message);
 		}

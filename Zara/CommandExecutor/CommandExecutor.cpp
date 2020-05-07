@@ -3,6 +3,7 @@
 #include <iostream>
 
 
+// Меньшее зло
 void Zara::CommandExecutor::executeCommand(std::string cmd, std::string arg, SOCKET sock)
 {
 	if (cmd == "use")
@@ -13,6 +14,8 @@ void Zara::CommandExecutor::executeCommand(std::string cmd, std::string arg, SOC
 		collCommand(arg, sock);
 	else if (cmd == "insert")
 		insertCommand(arg, sock);
+	else if (cmd == "find")
+		findCommand(arg, sock);
 }
 
 
@@ -116,6 +119,33 @@ void Zara::CommandExecutor::insertCommand(std::string arg, SOCKET sock)
 	default:
 		break;
 	}
+}
+
+
+void Zara::CommandExecutor::findCommand(std::string arg, SOCKET sock)
+{
+	if (arg.empty())
+	{
+		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		return;
+	}
+	
+	nlohmann::json json;
+	try
+	{
+		json = parser->ParseJson(arg);
+	}
+	catch (nlohmann::json::parse_error& e)
+	{
+		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		return;
+	}
+
+	std::string key, value;
+	key = json.begin().key();
+	value = json.begin().value();
+
+	server->Send(sock, dbEngine->FindAllDocuments(usedDb, usedCollection, { key, value }));
 }
 
 

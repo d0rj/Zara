@@ -56,6 +56,7 @@ namespace Zara
 		std::string FindAllCollections(std::string dbName);
 		std::string FindDocument(std::string dbName, std::string collectionName, std::vector<std::string> query);
 		std::string FindAllDocuments(std::string dbName, std::string collectionName, std::vector<std::string> query);
+		std::string FindAllDocuments(std::string dbName, std::string collectionName, nlohmann::json query);
 		std::string AllDocuments(std::string dbName, std::string collectionName);
 	};
 }

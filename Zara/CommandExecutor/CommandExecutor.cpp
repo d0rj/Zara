@@ -130,22 +130,18 @@ void Zara::CommandExecutor::findCommand(std::string arg, SOCKET sock)
 		return;
 	}
 	
-	nlohmann::json json;
+	nlohmann::json query;
 	try
 	{
-		json = parser->ParseJson(arg);
+		query = parser->ParseJson(arg);
 	}
-	catch (nlohmann::json::parse_error& e)
+	catch (nlohmann::json::parse_error& _)
 	{
 		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
 		return;
 	}
 
-	std::string key, value;
-	key = json.begin().key();
-	value = json.begin().value();
-
-	server->Send(sock, dbEngine->FindAllDocuments(usedDb, usedCollection, { key, value }));
+	server->Send(sock, dbEngine->FindAllDocuments(usedDb, usedCollection, query));
 }
 
 

@@ -404,6 +404,47 @@ std::string Zara::WiredSnake::FindAllDocuments(std::string dbName, std::string c
 }
 
 
+std::string Zara::WiredSnake::FindAllDocuments(std::string dbName, std::string collectionName, nlohmann::json query)
+{
+	std::ostringstream ss;
+	ss << std::string();
+
+	int dbIndex = getDbIndex(dbName);
+	if (dbIndex < 0)
+		return ss.str();
+	int collIndex = getCollectionIndex(dbIndex, collectionName);
+	if (collIndex < 0)
+		return ss.str();
+
+	fs::path path = collectionFilePath(dbName, collectionName);
+	nlohmann::json collection = files->ReadJson(path);
+
+	auto documents = collection["documents"].get<std::vector<nlohmann::json>>();
+	bool thisChecked;
+	for (auto document : documents)
+	{
+		thisChecked = true;
+		for (auto& subQuery : query.items())
+		{
+			auto temp = document.find(subQuery.key());
+
+			if (temp != document.end())
+			{
+				if ((*temp) != subQuery.value())
+					thisChecked = false;
+			}
+			else
+				thisChecked = false;
+		}
+
+		if (thisChecked)
+			ss << document << "\n";
+	}
+
+	return ss.str();
+}
+
+
 std::string Zara::WiredSnake::AllDocuments(std::string dbName, std::string collectionName)
 {
 	std::ostringstream ss;

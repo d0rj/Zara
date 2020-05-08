@@ -52,6 +52,7 @@ namespace Zara
 
 		EngineResult DeleteCollection(std::string dbName, std::string name);
 		EngineResult DeleteDocument(std::string dbName, std::string collectionName, std::vector<std::string> query);
+		EngineResult DeleteDocuments(std::string dbName, std::string collectionName, nlohmann::json query);
 
 		std::string FindAllCollections(std::string dbName);
 		std::string FindDocument(std::string dbName, std::string collectionName, std::vector<std::string> query);

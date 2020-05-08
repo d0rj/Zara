@@ -17,7 +17,7 @@ namespace Zara
 		IServer* server;
 		std::string usedDb = "default";
 		std::string usedCollection = "default";
-		std::vector<std::string> commands = {"use", "db", "coll", "insert", "find"};
+		std::vector<std::string> commands = {"use", "db", "coll", "insert", "find", "remove"};
 		std::mutex engineMutex;
 		std::mutex serverMutex;
 
@@ -27,6 +27,7 @@ namespace Zara
 		void collCommand(std::string arg, SOCKET sock);
 		void insertCommand(std::string arg, SOCKET sock);
 		void findCommand(std::string arg, SOCKET sock);
+		void removeCommand(std::string arg, SOCKET sock);
 	public:
 		CommandExecutor(IDbEngine* dbEngine, IServer* server);
 		void OnConnect(SOCKET sock);

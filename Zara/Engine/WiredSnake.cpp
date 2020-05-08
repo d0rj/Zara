@@ -326,6 +326,58 @@ Zara::EngineResult Zara::WiredSnake::DeleteDocument(std::string dbName, std::str
 }
 
 
+Zara::EngineResult Zara::WiredSnake::DeleteDocuments(std::string dbName, std::string collectionName, nlohmann::json query)
+{
+	int dbIndex = getDbIndex(dbName);
+	if (dbIndex < 0)
+		return EngineResult::NotFound;
+	int collIndex = getCollectionIndex(dbIndex, collectionName);
+	if (collIndex < 0)
+		return EngineResult::NotFound;
+
+	fs::path path = collectionFilePath(dbName, collectionName);
+	nlohmann::json collection = files->ReadJson(path);
+
+	bool hasDeleted = false;
+	bool thisChecked;
+	for (int i = 0; i < collection["documents"].size(); ++i)
+	{
+		thisChecked = true;
+		for (auto& subQuery : query.items())
+		{
+			auto temp = collection["documents"][i].find(subQuery.key());
+
+			if (temp != collection["documents"][i].end())
+			{
+				if ((*temp) != subQuery.value())
+				{
+					thisChecked = false;
+					break;
+				}
+			}
+			else
+			{
+				thisChecked = false;
+				break;
+			}
+		}
+
+		if (thisChecked)
+		{
+			collection["documents"].erase(i);
+			i = 0;
+			hasDeleted = true;
+		}
+	}
+
+	if (!hasDeleted)
+		return EngineResult::NotFound;
+
+	files->CreateF(path, collection);
+	return EngineResult::OK;
+}
+
+
 std::string Zara::WiredSnake::FindAllCollections(std::string dbName)
 {
 	std::ostringstream ss;

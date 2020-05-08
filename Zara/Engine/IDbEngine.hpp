@@ -33,6 +33,7 @@ namespace Zara
 
 		virtual EngineResult DeleteCollection(std::string dbName, std::string name) = 0;
 		virtual EngineResult DeleteDocument(std::string dbName, std::string collectionName, std::vector<std::string> query) = 0;
+		virtual EngineResult DeleteDocuments(std::string dbName, std::string collectionName, nlohmann::json query) = 0;
 
 		virtual std::string FindAllCollections(std::string dbName) = 0;
 		virtual std::string FindDocument(std::string dbName, std::string collectionName, std::vector<std::string> query) = 0;

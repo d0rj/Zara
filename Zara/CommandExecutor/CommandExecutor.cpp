@@ -17,6 +17,8 @@ void Zara::CommandExecutor::executeCommand(std::string cmd, std::string arg, SOC
 		insertCommand(arg, sock);
 	else if (cmd == "find")
 		findCommand(arg, sock);
+	else if (cmd == "remove")
+		removeCommand(arg, sock);
 }
 
 
@@ -197,6 +199,52 @@ void Zara::CommandExecutor::findCommand(std::string arg, SOCKET sock)
 
 	serverMutex.lock();
 	server->Send(sock, documents);
+	serverMutex.unlock();
+}
+
+
+void Zara::CommandExecutor::removeCommand(std::string arg, SOCKET sock)
+{
+	if (arg.empty())
+	{
+		serverMutex.lock();
+		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		serverMutex.unlock();
+
+		return;
+	}
+
+	nlohmann::json query;
+	try
+	{
+		query = nlohmann::json::parse(arg);
+	}
+	catch (nlohmann::json::parse_error& _)
+	{
+		serverMutex.lock();
+		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		serverMutex.unlock();
+
+		return;
+	}
+
+	engineMutex.lock();
+	auto result = dbEngine->DeleteDocuments(usedDb, usedCollection, query);
+	engineMutex.unlock();
+
+	serverMutex.lock();
+	switch (result)
+	{
+	case Zara::EngineResult::Error:
+	case Zara::EngineResult::NotFound:
+		server->Send(sock, "No found documents to remove.");
+		break;
+	case Zara::EngineResult::OK:
+		server->Send(sock, "Removed.");
+		break;
+	default:
+		break;
+	}
 	serverMutex.unlock();
 }
 

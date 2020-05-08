@@ -76,7 +76,7 @@ void Zara::Server::Listen(
 				handleNewConnection(sock);
 
 				std::thread clientThread(onConnect, sock);
-				clientThread.join();
+				clientThread.detach();
 			}
 			else
 			{
@@ -88,7 +88,7 @@ void Zara::Server::Listen(
 					handleDisconnect(sock);
 					
 					std::thread clientThread(onDisconnect, sock);
-					clientThread.join();
+					clientThread.detach();
 				}
 				else
 				{
@@ -97,7 +97,7 @@ void Zara::Server::Listen(
 					handleNewMessage(sock, message);
 					
 					std::thread clientThread(onMessage, sock, message);
-					clientThread.join();
+					clientThread.detach();
 				}
 			}
 		}

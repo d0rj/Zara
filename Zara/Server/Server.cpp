@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include <functional>
+#include <thread>
 
 
 void Zara::Server::handleNewConnection(SOCKET sock)
@@ -73,7 +74,9 @@ void Zara::Server::Listen(
 			if (sock == listeningSock)
 			{
 				handleNewConnection(sock);
-				onConnect(sock);
+
+				std::thread clientThread(onConnect, sock);
+				clientThread.join();
 			}
 			else
 			{
@@ -83,14 +86,18 @@ void Zara::Server::Listen(
 				if (bytesIn <= 0)
 				{
 					handleDisconnect(sock);
-					onDisconnect(sock);
+					
+					std::thread clientThread(onDisconnect, sock);
+					clientThread.join();
 				}
 				else
 				{
 					auto message = std::string(buffer, bytesIn);
 
 					handleNewMessage(sock, message);
-					onMessage(sock, message);
+					
+					std::thread clientThread(onMessage, sock, message);
+					clientThread.join();
 				}
 			}
 		}

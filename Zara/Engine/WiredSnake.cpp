@@ -431,10 +431,16 @@ std::string Zara::WiredSnake::FindAllDocuments(std::string dbName, std::string c
 			if (temp != document.end())
 			{
 				if ((*temp) != subQuery.value())
+				{
 					thisChecked = false;
+					break;
+				}
 			}
 			else
+			{
 				thisChecked = false;
+				break;
+			}
 		}
 
 		if (thisChecked)

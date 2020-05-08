@@ -1,6 +1,7 @@
 #include "CommandExecutor.hpp"
 #include <algorithm>
 #include <iostream>
+#include "../Parser/EagleParser.hpp"
 
 
 // Меньшее зло
@@ -28,12 +29,16 @@ void Zara::CommandExecutor::useCommand(std::string arg, SOCKET sock)
 		if (dotPos == std::string::npos)
 		{
 			usedDb = arg;
+			engineMutex.lock();
 			EngineResult result = dbEngine->CreateDb(arg);
+			engineMutex.unlock();
 
+			serverMutex.lock();
 			if (result == EngineResult::AlreadyExists)
 				server->Send(sock, "Switched to db \'" + usedDb + "\'.");
 			else
 				server->Send(sock, "Created db: \'" + usedDb + "\'.");
+			serverMutex.unlock();
 		}
 		else
 		{
@@ -41,22 +46,32 @@ void Zara::CommandExecutor::useCommand(std::string arg, SOCKET sock)
 			first = arg.substr(0, dotPos);
 			if (first != "db")
 			{
+				serverMutex.lock();
 				server->Send(sock, "Invalid argument: \'" + arg + "\'. ");
+				serverMutex.unlock();
+
 				return;
 			}
 
 			usedCollection = arg.substr(dotPos + 1, arg.size() - dotPos - 1);
-			EngineResult result = dbEngine->CreateCollection(usedDb, usedCollection);
 
+			engineMutex.lock();
+			EngineResult result = dbEngine->CreateCollection(usedDb, usedCollection);
+			engineMutex.unlock();
+
+			serverMutex.lock();
 			if (result == EngineResult::AlreadyExists)
 				server->Send(sock, "Switched to collection \'" + usedCollection + "\' in \'" + usedDb + "\'.");
 			else
 				server->Send(sock, "Created collection: \'" + usedDb + "." + usedCollection + "\'.");
+			serverMutex.unlock();
 		}
 	}
 	else
 	{
+		serverMutex.lock();
 		server->Send(sock, "Invalid command argument: " + arg + ".");
+		serverMutex.unlock();
 	}
 }
 
@@ -65,15 +80,25 @@ void Zara::CommandExecutor::dbCommand(std::string arg, SOCKET sock)
 {
 	if (arg.empty())
 	{
+		serverMutex.lock();
 		server->Send(sock, "Used db: \'" + usedDb + "\'.");
+		serverMutex.unlock();
 	}
 	else if (arg == "*")
 	{
-		server->Send(sock, dbEngine->FindAllCollections(usedDb));
+		engineMutex.lock();
+		std::string collections = dbEngine->FindAllCollections(usedDb);
+		engineMutex.unlock();
+
+		serverMutex.lock();
+		server->Send(sock, collections);
+		serverMutex.unlock();
 	}
 	else
 	{
+		serverMutex.lock();
 		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		serverMutex.unlock();
 	}
 }
 
@@ -82,15 +107,25 @@ void Zara::CommandExecutor::collCommand(std::string arg, SOCKET sock)
 {
 	if (arg.empty())
 	{
+		serverMutex.lock();
 		server->Send(sock, "Used collection: \'" + usedDb + "." + usedCollection + "\'.");
+		serverMutex.unlock();
 	}
 	else if (arg == "*")
 	{
-		server->Send(sock, dbEngine->AllDocuments(usedDb, usedCollection));
+		engineMutex.lock();
+		std::string documents = dbEngine->AllDocuments(usedDb, usedCollection);
+		engineMutex.unlock();
+
+		serverMutex.lock();
+		server->Send(sock, documents);
+		serverMutex.unlock();
 	}
 	else
 	{
+		serverMutex.lock();
 		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		serverMutex.unlock();
 	}
 }
 
@@ -99,11 +134,19 @@ void Zara::CommandExecutor::insertCommand(std::string arg, SOCKET sock)
 {
 	if (arg.empty())
 	{
+		serverMutex.lock();
 		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		serverMutex.unlock();
+
 		return;
 	}
 	
-	switch (dbEngine->CreateDocument(usedDb, usedCollection, arg))
+	engineMutex.lock();
+	EngineResult result = dbEngine->CreateDocument(usedDb, usedCollection, arg);
+	engineMutex.unlock();
+
+	serverMutex.lock();
+	switch (result)
 	{
 	case EngineResult::Error:
 	case EngineResult::ErrorOnCreating:
@@ -119,6 +162,7 @@ void Zara::CommandExecutor::insertCommand(std::string arg, SOCKET sock)
 	default:
 		break;
 	}
+	serverMutex.unlock();
 }
 
 
@@ -126,7 +170,10 @@ void Zara::CommandExecutor::findCommand(std::string arg, SOCKET sock)
 {
 	if (arg.empty())
 	{
+		serverMutex.lock();
 		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		serverMutex.unlock();
+
 		return;
 	}
 	
@@ -137,16 +184,25 @@ void Zara::CommandExecutor::findCommand(std::string arg, SOCKET sock)
 	}
 	catch (nlohmann::json::parse_error& _)
 	{
+		serverMutex.lock();
 		server->Send(sock, "Invalid argument: \'" + arg + "\'.");
+		serverMutex.unlock();
+
 		return;
 	}
 
-	server->Send(sock, dbEngine->FindAllDocuments(usedDb, usedCollection, query));
+	engineMutex.lock();
+	std::string documents = dbEngine->FindAllDocuments(usedDb, usedCollection, query);
+	engineMutex.unlock();
+
+	serverMutex.lock();
+	server->Send(sock, documents);
+	serverMutex.unlock();
 }
 
 
-Zara::CommandExecutor::CommandExecutor(IDbEngine* dbEngine, IParser* parser, IServer* server)
-	: dbEngine(dbEngine), parser(parser), server(server)
+Zara::CommandExecutor::CommandExecutor(IDbEngine* dbEngine, IServer* server)
+	: dbEngine(dbEngine), parser(new EagleParser()), server(server)
 {
 }
 
@@ -166,7 +222,10 @@ void Zara::CommandExecutor::OnMessage(SOCKET sock, std::string message)
 	std::unordered_map<std::string, std::string> parsedCommands = parser->Parse(message);
 	if (parsedCommands.empty())
 	{
+		serverMutex.lock();
 		server->Send(sock, "Error: no commands.");
+		serverMutex.unlock();
+
 		return;
 	}
 
@@ -181,7 +240,10 @@ void Zara::CommandExecutor::OnMessage(SOCKET sock, std::string message)
 		else
 		{
 			std::string result = "Unknown command \"" + parsedCommand->first + "\".";
+
+			serverMutex.lock();
 			server->Send(sock, result);
+			serverMutex.unlock();
 			// TODO: handle errors
 			break;
 		}
@@ -189,6 +251,8 @@ void Zara::CommandExecutor::OnMessage(SOCKET sock, std::string message)
 
 	if (!hasFinded)
 	{
+		serverMutex.lock();
 		server->Send(sock, "No supported commands finded.");
+		serverMutex.unlock();
 	}
 }

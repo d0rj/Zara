@@ -3,7 +3,6 @@
 #include "Files/FileWorker.hpp"
 #include "Crypto/EVP.hpp"
 #include "Engine/WiredSnake.hpp"
-#include "Parser/EagleParser.hpp"
 #include "CommandExecutor/CommandExecutor.hpp"
 
 
@@ -13,11 +12,10 @@ using namespace Zara;
 
 int main(int argc, char* argv[])
 {
-	IParser* parser = new EagleParser();
 	IFileWorker* files = new FileWorker();
 	IDbEngine* engine = new WiredSnake(files, "C:/zara");
 	IServer* server = new Server(3228);
-	CommandExecutor executor(engine, parser, server);
+	CommandExecutor executor(engine, server);
 	
 	server->Listen(
 		[&executor](SOCKET sock) mutable {

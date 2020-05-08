@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Server/Server.hpp"
-#include "Files/FileWorker.hpp"
+#include "Files/CryptoFileWorker.hpp"
 #include "Crypto/EVP.hpp"
 #include "Engine/WiredSnake.hpp"
 #include "CommandExecutor/CommandExecutor.hpp"
@@ -12,7 +12,9 @@ using namespace Zara;
 
 int main(int argc, char* argv[])
 {
-	IFileWorker* files = new FileWorker();
+	string key = "0123456789012345";
+	IEncoder* encoder = new EVP((unsigned char*)key.c_str());
+	IFileWorker* files = new CryptoFileWorker(encoder, key);
 	IDbEngine* engine = new WiredSnake(files, "C:/zara");
 	IServer* server = new Server(3228);
 	CommandExecutor executor(engine, server);

@@ -142,6 +142,7 @@
     <ClCompile Include="CommandExecutor\CommandExecutor.cpp" />
     <ClCompile Include="Crypto\EVP.cpp" />
     <ClCompile Include="Engine\WiredSnake.cpp" />
+    <ClCompile Include="Files\CryptoFileWorker.cpp" />
     <ClCompile Include="Files\FileWorker.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser\ArgumentState.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Crypto\IEncoder.hpp" />
     <ClInclude Include="Engine\IDbEngine.hpp" />
     <ClInclude Include="Engine\WiredSnake.hpp" />
+    <ClInclude Include="Files\CryptoFileWorker.hpp" />
     <ClInclude Include="Files\FileWorker.hpp" />
     <ClInclude Include="Files\IFileWorker.hpp" />
     <ClInclude Include="Parser\ArgumentState.hpp" />

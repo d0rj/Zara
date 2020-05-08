@@ -81,6 +81,9 @@
     <ClCompile Include="CommandExecutor\CommandExecutor.cpp">
       <Filter>Исходные файлы\CommandExecutor</Filter>
     </ClCompile>
+    <ClCompile Include="Files\CryptoFileWorker.cpp">
+      <Filter>Исходные файлы\Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server\IServer.hpp">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="CommandExecutor\CommandExecutor.hpp">
       <Filter>Файлы заголовков\CommandExecutor</Filter>
+    </ClInclude>
+    <ClInclude Include="Files\CryptoFileWorker.hpp">
+      <Filter>Файлы заголовков\Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

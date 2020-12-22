@@ -1,24 +1,13 @@
 #include "CommandExecutor.hpp"
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include "../Parser/EagleParser.hpp"
 
 
-// Меньшее зло
 void Zara::CommandExecutor::executeCommand(std::string cmd, std::string arg, SOCKET sock)
 {
-	if (cmd == "use")
-		useCommand(arg, sock);
-	else if (cmd == "db")
-		dbCommand(arg, sock);
-	else if (cmd == "coll")
-		collCommand(arg, sock);
-	else if (cmd == "insert")
-		insertCommand(arg, sock);
-	else if (cmd == "find")
-		findCommand(arg, sock);
-	else if (cmd == "remove")
-		removeCommand(arg, sock);
+	handlers[cmd](arg, sock);
 }
 
 
@@ -280,7 +269,7 @@ void Zara::CommandExecutor::OnMessage(SOCKET sock, std::string message)
 	bool hasFinded = false;
 	for (auto parsedCommand = parsedCommands.cbegin(); parsedCommand != parsedCommands.cend(); ++parsedCommand)
 	{
-		if (auto finded = std::find(commands.begin(), commands.end(), parsedCommand->first); finded != commands.end())
+		if (handlers.contains(parsedCommand->first))
 		{
 			hasFinded = true;
 			executeCommand(parsedCommand->first, parsedCommand->second, sock);

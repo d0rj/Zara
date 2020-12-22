@@ -5,6 +5,10 @@
 #include "../Server/IServer.hpp"
 #include <string>
 #include <mutex>
+#include <functional>
+
+
+using namespace std::placeholders;
 
 
 namespace Zara
@@ -17,7 +21,14 @@ namespace Zara
 		IServer* server;
 		std::string usedDb = "default";
 		std::string usedCollection = "default";
-		std::vector<std::string> commands = {"use", "db", "coll", "insert", "find", "remove"};
+		std::map<std::string, std::function<void(std::string, SOCKET)>> handlers = {
+			{"use", std::bind(&CommandExecutor::useCommand, this, std::placeholders::_1, std::placeholders::_2)},
+			{"db", std::bind(&CommandExecutor::dbCommand, this, std::placeholders::_1, std::placeholders::_2)},
+			{"coll", std::bind(&CommandExecutor::collCommand, this, std::placeholders::_1, std::placeholders::_2)},
+			{"insert", std::bind(&CommandExecutor::insertCommand, this, std::placeholders::_1, std::placeholders::_2)},
+			{"find", std::bind(&CommandExecutor::findCommand, this, std::placeholders::_1, std::placeholders::_2)},
+			{"remove", std::bind(&CommandExecutor::removeCommand, this, std::placeholders::_1, std::placeholders::_2)}
+		};
 		std::mutex engineMutex;
 		std::mutex serverMutex;
 

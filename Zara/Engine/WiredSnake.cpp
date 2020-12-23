@@ -59,13 +59,6 @@ void Zara::WiredSnake::handleConfigFile()
 }
 
 
-// TODO: async 
-bool Zara::WiredSnake::locked() const noexcept
-{
-	return false;
-}
-
-
 void Zara::WiredSnake::configFromJson(nlohmann::json* config) noexcept
 {
 	directoryPrerDb = (*config)["directoryPrerDb"].get<bool>();

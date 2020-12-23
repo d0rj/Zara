@@ -30,7 +30,6 @@ namespace Zara
 		void createConfigFile() const noexcept;
 		void createManifestFile() const noexcept;
 		void handleConfigFile();
-		bool locked() const noexcept;
 		void configFromJson(nlohmann::json* config) noexcept;
 		bool dbExist(std::string name) const noexcept;
 		void createEmptyDb(std::string name) noexcept;
